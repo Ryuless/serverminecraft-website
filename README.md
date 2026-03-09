@@ -45,6 +45,7 @@ Untuk redeem code (Vault/LiteEco via RCON), tambahkan juga:
 	- contoh: `{\"GABUT500\":500,\"VEYNAR1000\":1000}`
 - `ALLOW_REPEAT_REDEEM_SAME_IP` = `false` (default, IP yang sama tidak bisa redeem lagi)
 - `MOJANG_LOOKUP_TIMEOUT_MS` = `5000` (timeout pengecekan nickname)
+- `ALLOW_OFFLINE_NICKNAME` = `true` jika server offline/cracked (skip verifikasi Mojang)
 
 Catatan IP detector:
 

@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 const MOJANG_LOOKUP_TIMEOUT_MS = Number(process.env.MOJANG_LOOKUP_TIMEOUT_MS || 5000)
+const ALLOW_OFFLINE_NICKNAME = (process.env.ALLOW_OFFLINE_NICKNAME || 'false').trim() === 'true'
 
 function getSafeLookupTimeout() {
   if (Number.isFinite(MOJANG_LOOKUP_TIMEOUT_MS) && MOJANG_LOOKUP_TIMEOUT_MS >= 1000 && MOJANG_LOOKUP_TIMEOUT_MS <= 20000) {
@@ -90,9 +91,33 @@ export default async function handler(req, res) {
       return
     }
 
+    if (ALLOW_OFFLINE_NICKNAME) {
+      res.status(200).json({
+        ok: true,
+        match: true,
+        nickname,
+        message: 'nickname match',
+        source: 'offline-validation',
+      })
+      return
+    }
+
     const match = await lookupNickname(nickname)
-    res.status(200).json({ ok: true, match, nickname })
+    res.status(200).json({
+      ok: true,
+      match,
+      nickname,
+      message: match
+        ? 'nickname match'
+        : 'Nickname tidak ditemukan di Mojang. Jika server offline/cracked, aktifkan ALLOW_OFFLINE_NICKNAME=true.',
+      source: 'mojang-api',
+    })
   } catch {
-    res.status(200).json({ ok: true, match: false })
+    res.status(200).json({
+      ok: true,
+      match: false,
+      message: 'Gagal menghubungi Mojang API. Coba lagi atau aktifkan ALLOW_OFFLINE_NICKNAME=true.',
+      source: 'mojang-api',
+    })
   }
 }

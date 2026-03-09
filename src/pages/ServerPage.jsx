@@ -82,6 +82,19 @@ function ServerPage() {
     setFloatingNotice({ type, message })
   }
 
+  async function readJsonPayload(response) {
+    const contentType = response.headers.get('content-type') || ''
+    if (!contentType.toLowerCase().includes('application/json')) {
+      return null
+    }
+
+    try {
+      return await response.json()
+    } catch {
+      return null
+    }
+  }
+
   async function handleFindNickname() {
     const normalizedNickname = nicknameInput.trim()
     if (!normalizedNickname) {
@@ -102,11 +115,11 @@ function ServerPage() {
         }),
       })
 
-      const payload = await response.json()
+      const payload = await readJsonPayload(response)
 
       if (!response.ok || !payload?.match) {
         setNicknameMatched(false)
-        showFloatingNotice('fail', 'gagal')
+        showFloatingNotice('fail', payload?.message || 'gagal')
         return
       }
 
@@ -114,7 +127,7 @@ function ServerPage() {
       showFloatingNotice('success', 'nickname match')
     } catch {
       setNicknameMatched(false)
-      showFloatingNotice('fail', 'gagal')
+      showFloatingNotice('fail', 'gagal koneksi api')
     } finally {
       setNicknameLookupLoading(false)
     }
@@ -148,10 +161,10 @@ function ServerPage() {
         }),
       })
 
-      const payload = await response.json()
+      const payload = await readJsonPayload(response)
 
       if (!response.ok || !payload?.ok) {
-        showFloatingNotice('fail', 'gagal')
+        showFloatingNotice('fail', payload?.message || 'gagal')
         return
       }
 
@@ -166,7 +179,7 @@ function ServerPage() {
       showFloatingNotice('success', `redeemed - Rp ${Number(payload.amount || 0).toLocaleString('id-ID')}`)
       setRedeemCodeInput('')
     } catch {
-      showFloatingNotice('fail', 'gagal')
+      showFloatingNotice('fail', 'gagal koneksi api')
     } finally {
       setRedeemLoading(false)
     }
