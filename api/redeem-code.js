@@ -37,6 +37,8 @@ const ECONOMY_MODE = (process.env.ECONOMY_PLUGIN_MODE || 'vault').trim().toLower
 const ECO_COMMAND_TEMPLATE = (process.env.ECO_COMMAND_TEMPLATE || '').trim()
 const REDEEM_DEFAULT_PLAYER = (process.env.REDEEM_DEFAULT_PLAYER || '').trim()
 const ALLOW_REPEAT_REDEEM_SAME_IP = (process.env.ALLOW_REPEAT_REDEEM_SAME_IP || 'false').trim() === 'true'
+const OWNER_TEST_REDEEM_CODE = (process.env.OWNER_TEST_REDEEM_CODE || 'RYU-OWNER-TEST').trim().toUpperCase()
+const OWNER_TEST_REDEEM_AMOUNT = Number(process.env.OWNER_TEST_REDEEM_AMOUNT || 1000)
 
 const redeemedIps = new Set()
 
@@ -200,13 +202,19 @@ export default async function handler(req, res) {
     }
 
     const amount = REDEEM_CODE_REWARDS[code]
+    const isOwnerTestCode = code === OWNER_TEST_REDEEM_CODE
+    const finalAmount = isOwnerTestCode
+      ? (Number.isFinite(OWNER_TEST_REDEEM_AMOUNT) && OWNER_TEST_REDEEM_AMOUNT > 0
+          ? Math.floor(OWNER_TEST_REDEEM_AMOUNT)
+          : 1000)
+      : amount
 
-    if (!amount) {
+    if (!finalAmount) {
       res.status(400).json({ ok: false, status: 'fail', message: 'Code tidak valid.' })
       return
     }
 
-    if (!ALLOW_REPEAT_REDEEM_SAME_IP && clientIp !== 'unknown' && redeemedIps.has(clientIp)) {
+    if (!isOwnerTestCode && !ALLOW_REPEAT_REDEEM_SAME_IP && clientIp !== 'unknown' && redeemedIps.has(clientIp)) {
       res.status(403).json({
         ok: false,
         status: 'fail',
@@ -224,9 +232,9 @@ export default async function handler(req, res) {
       return
     }
 
-    const command = resolveEcoCommand(player, amount)
+    const command = resolveEcoCommand(player, finalAmount)
     const commandOutput = await executeRconCommand(command)
-    if (clientIp !== 'unknown') {
+    if (!isOwnerTestCode && clientIp !== 'unknown') {
       redeemedIps.add(clientIp)
     }
 
@@ -235,7 +243,7 @@ export default async function handler(req, res) {
       status: 'redeemed',
       code,
       player,
-      amount,
+      amount: finalAmount,
       clientIp,
       command,
       commandOutput,
