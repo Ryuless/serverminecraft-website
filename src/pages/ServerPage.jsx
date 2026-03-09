@@ -5,30 +5,8 @@ import {
   initialStats,
 } from '../data/siteData'
 
-const REDEEM_HISTORY_STORAGE_KEY = 'veynarsmp_redeem_history'
-
 function ServerPage() {
   const [stats, setStats] = useState(initialStats)
-  const [isRedeemOpen, setIsRedeemOpen] = useState(false)
-  const [nicknameInput, setNicknameInput] = useState('')
-  const [nicknameMatched, setNicknameMatched] = useState(false)
-  const [nicknameLookupLoading, setNicknameLookupLoading] = useState(false)
-  const [redeemCodeInput, setRedeemCodeInput] = useState('')
-  const [redeemLoading, setRedeemLoading] = useState(false)
-  const [floatingNotice, setFloatingNotice] = useState(null)
-  const [rewardHistory, setRewardHistory] = useState(() => {
-    const raw = localStorage.getItem(REDEEM_HISTORY_STORAGE_KEY)
-    if (!raw) {
-      return []
-    }
-
-    try {
-      const parsed = JSON.parse(raw)
-      return Array.isArray(parsed) ? parsed : []
-    } catch {
-      return []
-    }
-  })
   const [cubeRotation, setCubeRotation] = useState({ x: -22, y: 35 })
   const dragStateRef = useRef({
     dragging: false,
@@ -66,124 +44,6 @@ function ServerPage() {
         : 'Maintenance'
 
   const statusLabel = statusText
-
-  function openRedeemPopup() {
-    setIsRedeemOpen(true)
-  }
-
-  function closeRedeemPopup() {
-    setIsRedeemOpen(false)
-    setNicknameInput('')
-    setNicknameMatched(false)
-    setRedeemCodeInput('')
-  }
-
-  function showFloatingNotice(type, message) {
-    setFloatingNotice({ type, message })
-  }
-
-  async function readJsonPayload(response) {
-    const contentType = response.headers.get('content-type') || ''
-    if (!contentType.toLowerCase().includes('application/json')) {
-      return null
-    }
-
-    try {
-      return await response.json()
-    } catch {
-      return null
-    }
-  }
-
-  async function handleFindNickname() {
-    const normalizedNickname = nicknameInput.trim()
-    if (!normalizedNickname) {
-      setNicknameMatched(false)
-      showFloatingNotice('fail', 'gagal')
-      return
-    }
-
-    try {
-      setNicknameLookupLoading(true)
-      const response = await fetch('/api/find-nickname', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nickname: normalizedNickname,
-        }),
-      })
-
-      const payload = await readJsonPayload(response)
-
-      if (!response.ok || !payload?.match) {
-        setNicknameMatched(false)
-        showFloatingNotice('fail', payload?.message || 'gagal')
-        return
-      }
-
-      setNicknameMatched(true)
-      showFloatingNotice('success', 'nickname match')
-    } catch {
-      setNicknameMatched(false)
-      showFloatingNotice('fail', 'gagal koneksi api')
-    } finally {
-      setNicknameLookupLoading(false)
-    }
-  }
-
-  async function handleRedeemSubmit(event) {
-    event.preventDefault()
-    const normalizedCode = redeemCodeInput.trim().toUpperCase()
-    const normalizedNickname = nicknameInput.trim()
-
-    if (!normalizedNickname || !nicknameMatched) {
-      showFloatingNotice('fail', 'gagal')
-      return
-    }
-
-    if (!normalizedCode) {
-      showFloatingNotice('fail', 'gagal')
-      return
-    }
-
-    try {
-      setRedeemLoading(true)
-      const response = await fetch('/api/redeem-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          code: normalizedCode,
-          player: normalizedNickname,
-        }),
-      })
-
-      const payload = await readJsonPayload(response)
-
-      if (!response.ok || !payload?.ok) {
-        showFloatingNotice('fail', payload?.message || 'gagal')
-        return
-      }
-
-      setRewardHistory((current) => [
-        {
-          code: normalizedCode,
-          amount: payload.amount,
-          claimedAt: new Date().toISOString(),
-        },
-        ...current,
-      ])
-      showFloatingNotice('success', `redeemed - Rp ${Number(payload.amount || 0).toLocaleString('id-ID')}`)
-      setRedeemCodeInput('')
-    } catch {
-      showFloatingNotice('fail', 'gagal koneksi api')
-    } finally {
-      setRedeemLoading(false)
-    }
-  }
 
   function handleCubePointerDown(event) {
     dragStateRef.current = {
@@ -339,22 +199,6 @@ function ServerPage() {
 
     return () => clearInterval(tickerId)
   }, [])
-
-  useEffect(() => {
-    localStorage.setItem(REDEEM_HISTORY_STORAGE_KEY, JSON.stringify(rewardHistory))
-  }, [rewardHistory])
-
-  useEffect(() => {
-    if (!floatingNotice) {
-      return
-    }
-
-    const timeoutId = setTimeout(() => {
-      setFloatingNotice(null)
-    }, 2800)
-
-    return () => clearTimeout(timeoutId)
-  }, [floatingNotice])
 
   return (
     <main className="server-page">
@@ -515,80 +359,6 @@ function ServerPage() {
           </div>
         </article>
       </section>
-
-      <button type="button" className="btn btn-redeem-float" onClick={openRedeemPopup}>
-        Redeem Code
-      </button>
-
-      {isRedeemOpen && (
-        <div className="redeem-popup-backdrop" onClick={closeRedeemPopup}>
-          <div className="redeem-popup" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
-            <div className="redeem-popup-header">
-              <h2>Redeem Code</h2>
-              <button type="button" className="redeem-close-btn" onClick={closeRedeemPopup}>
-                ✕
-              </button>
-            </div>
-            <form className="redeem-form" onSubmit={handleRedeemSubmit}>
-              <div className="redeem-player-row">
-                <input
-                  className="redeem-input"
-                  type="text"
-                  placeholder="Masukkan nickname Minecraft"
-                  value={nicknameInput}
-                  onChange={(event) => {
-                    setNicknameInput(event.target.value)
-                    setNicknameMatched(false)
-                  }}
-                />
-                <button
-                  type="button"
-                  className="btn btn-secondary redeem-find-btn"
-                  onClick={handleFindNickname}
-                  disabled={nicknameLookupLoading}
-                >
-                  Find
-                </button>
-              </div>
-              <input
-                className="redeem-input"
-                type="text"
-                placeholder="Masukkan code"
-                value={redeemCodeInput}
-                disabled={!nicknameMatched}
-                onChange={(event) => setRedeemCodeInput(event.target.value)}
-              />
-              <button
-                type="submit"
-                className="btn btn-primary redeem-submit-btn"
-                disabled={redeemLoading || !nicknameMatched}
-              >
-                Redeem
-              </button>
-            </form>
-            <div className="redeem-gift-list">
-              <p className="redeem-gift-title">List Gift Didapatkan</p>
-              {rewardHistory.length === 0 ? (
-                <p className="redeem-gift-empty">Belum ada gift.</p>
-              ) : (
-                <ul>
-                  {rewardHistory.map((item, index) => (
-                    <li key={`${item.code}-${item.claimedAt}-${index}`}>
-                      {item.code} - Rp {Number(item.amount || 0).toLocaleString('id-ID')}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {floatingNotice && (
-        <div className={`floating-redeem-notice ${floatingNotice.type}`}>
-          {floatingNotice.message}
-        </div>
-      )}
 
     </main>
   )
