@@ -1,3 +1,15 @@
+const isLocalHost =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+
+const defaultRealtimeMetricsEndpoint = isLocalHost
+  ? 'http://localhost:9300/api/realtime-metrics'
+  : '/api/realtime-metrics'
+
+const defaultRealtimeMetricsStreamEndpoint = isLocalHost
+  ? 'http://localhost:9300/api/realtime-metrics/stream'
+  : ''
+
 export const SERVER_CONFIG = {
   name: 'Veynar SMP',
   maintenanceMode: false,
@@ -10,8 +22,11 @@ export const SERVER_CONFIG = {
     ip: 'veynarsmp.my.id',
     port: 19132,
   },
-  realtimeMetricsEndpoint: 'http://localhost:9300/api/realtime-metrics',
-  realtimeMetricsStreamEndpoint: 'http://localhost:9300/api/realtime-metrics/stream',
+  realtimeMetricsEndpoint:
+    import.meta.env.VITE_REALTIME_METRICS_ENDPOINT || defaultRealtimeMetricsEndpoint,
+  realtimeMetricsStreamEndpoint:
+    import.meta.env.VITE_REALTIME_METRICS_STREAM_ENDPOINT ||
+    defaultRealtimeMetricsStreamEndpoint,
 }
 
 export const COMMUNITY_INFO = {
