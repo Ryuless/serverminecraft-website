@@ -20,7 +20,7 @@ export const SERVER_CONFIG = {
   },
   bedrock: {
     ip: 'veynarsmp.my.id',
-    port: 19132,
+    port: 25889,
   },
   realtimeMetricsEndpoint:
     import.meta.env.VITE_REALTIME_METRICS_ENDPOINT || defaultRealtimeMetricsEndpoint,
