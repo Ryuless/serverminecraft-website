@@ -222,6 +222,10 @@ function ServerPage() {
                 {SERVER_CONFIG.bedrock.ip}:{SERVER_CONFIG.bedrock.port}
               </p>
             </article>
+            <article className="status-info-item">
+              <p className="status-note-label">Versi Server</p>
+              <p className="status-note-value">{SERVER_CONFIG.version}</p>
+            </article>
           </div>
         </div>
 

@@ -12,6 +12,7 @@ const defaultRealtimeMetricsStreamEndpoint = isLocalHost
 
 export const SERVER_CONFIG = {
   name: 'Veynar SMP',
+  version: '1.21+ (1.21.11 recommended)',
   maintenanceMode: false,
   refreshIntervalMs: 1000,
   java: {
