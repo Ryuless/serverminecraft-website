@@ -34,8 +34,8 @@ export const COMMUNITY_INFO = {
   adminName: 'Ryu',
   createdSince: '10 March 2023',
   socials: [
-    { label: 'Grup WhatsApp', url: 'https://chat.whatsapp.com/' },
-    { label: 'Discord', url: 'https://discord.gg/' },
+    { label: 'Grup WhatsApp', url: 'https://chat.whatsapp.com/EGFrculd7fWDqf8b4hZxLz?mode=gi_t' },
+    { label: 'Discord', url: 'https://discord.gg/BzKfkNY9uj' },
     { label: 'YouTube', url: 'https://youtube.com/' },
   ],
 }
