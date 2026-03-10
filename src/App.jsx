@@ -8,7 +8,7 @@ function App() {
   const isServerPage = location.pathname === '/server'
 
   const heroEyebrow = isServerPage ? 'Server Network' : 'AllGames Community'
-  const heroTitle = isServerPage ? 'GabutSMP' : 'Gabvers'
+  const heroTitle = isServerPage ? 'VeynarSMP' : 'Gabvers'
   const heroTitleSmall = isServerPage ? 'By Gabvers' : ''
   const heroSubtitle =
     'Community berbasis have fun, yang berdiri tanpa kesengajaan dan memilih bertahan ditengah kesibukan hidup penghuninnya.'
