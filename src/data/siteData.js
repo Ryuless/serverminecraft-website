@@ -17,11 +17,11 @@ export const SERVER_CONFIG = {
   refreshIntervalMs: 1000,
   java: {
     ip: 'veynarsmp.my.id',
-    port: 25889,
+    port: 25899,
   },
   bedrock: {
     ip: 'veynarsmp.my.id',
-    port: 25889,
+    port: 25899,
   },
   realtimeMetricsEndpoint:
     import.meta.env.VITE_REALTIME_METRICS_ENDPOINT || defaultRealtimeMetricsEndpoint,
