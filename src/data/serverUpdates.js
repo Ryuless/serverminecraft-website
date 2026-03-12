@@ -3,6 +3,7 @@ export const SERVER_UPDATES = [
     id: 'v1-1-2',
     version: 'v1.1.2',
     date: '2026-03-12',
+    image: '/patch-updates/images/v1.1.2.png',
     summary:
       'Added Jobs System, Added Parties System, Re-Added Clans System, Added Bounties System, Better World Generator',
     content: `Added Jobs System

@@ -19,6 +19,13 @@ function ServerUpdatesPage() {
             className="card metric-card update-link-card"
             to={`/server/updates/${item.id}`}
           >
+            {item.image && (
+              <img
+                className="update-card-image"
+                src={item.image}
+                alt={`Preview patch ${item.version}`}
+              />
+            )}
             <h2>{item.version}</h2>
             <p>{item.summary}</p>
           </Link>

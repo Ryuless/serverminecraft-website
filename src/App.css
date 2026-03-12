@@ -601,6 +601,15 @@ h1 {
   cursor: pointer;
 }
 
+.update-card-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(63, 110, 169, 0.5);
+}
+
 .update-link-card:visited,
 .update-link-card:hover,
 .update-link-card:active,
@@ -616,6 +625,14 @@ h1 {
   font: inherit;
   line-height: 1.5;
   color: #d8e8ff;
+}
+
+.update-detail-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid rgba(63, 110, 169, 0.5);
 }
 
 .metric-value {

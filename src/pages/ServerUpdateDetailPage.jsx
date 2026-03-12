@@ -39,6 +39,17 @@ function ServerUpdateDetailPage() {
         </div>
       </section>
 
+      {selectedUpdate.image && (
+        <section className="card full-width">
+          <h2>Preview Update</h2>
+          <img
+            className="update-detail-image"
+            src={selectedUpdate.image}
+            alt={`Preview detail patch ${selectedUpdate.version}`}
+          />
+        </section>
+      )}
+
       <section className="card full-width">
         <h2>Rincian Perubahan</h2>
         <div className="updates-list">
