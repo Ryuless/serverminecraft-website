@@ -3,11 +3,11 @@ const isLocalHost =
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
 
 const defaultRealtimeMetricsEndpoint = isLocalHost
-  ? 'http://localhost:9300/api/realtime-metrics'
+  ? 'http://localhost:9400/api/realtime-metrics'
   : '/api/realtime-metrics'
 
 const defaultRealtimeMetricsStreamEndpoint = isLocalHost
-  ? 'http://localhost:9300/api/realtime-metrics/stream'
+  ? 'http://localhost:9400/api/realtime-metrics/stream'
   : ''
 
 export const SERVER_CONFIG = {

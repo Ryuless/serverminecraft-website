@@ -5,7 +5,7 @@ import express from 'express'
 const app = express()
 app.use(cors())
 
-const METRICS_PORT = Number(process.env.METRICS_PORT || 9300)
+const METRICS_PORT = Number(process.env.METRICS_PORT || 9400)
 const UPDATE_INTERVAL_MS = Number(process.env.METRICS_INTERVAL_MS || 1000)
 const PLAN_BASE_URL = (process.env.PLAN_BASE_URL || '').trim().replace(/\/$/, '')
 const PLAN_METRICS_ENDPOINT = (process.env.PLAN_METRICS_ENDPOINT || '').trim()
