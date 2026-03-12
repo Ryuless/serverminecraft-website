@@ -1,8 +1,21 @@
 export const SERVER_UPDATES = [
   {
+    id: 'v1-1-2',
+    version: 'v1.1.2',
+    date: '2026-03-12',
+    summary:
+      'Added Jobs System, Added Parties System, Re-Added Clans System, Added Bounties System, Better World Generator',
+    content: `Added Jobs System
+Added Parties System
+Re-Added Clans System
+Added Bounties System
+Better World Generator`,
+  },
+  {
     id: 'v1-1',
     version: 'v1.1',
     date: '2026-03-12',
+    summary: 'New Races: Demon & Mermaid, Races Rework, Class Rework',
     content: `VALHALLARACES REWORK SUMMARY
 Date: 2026-03-12
 

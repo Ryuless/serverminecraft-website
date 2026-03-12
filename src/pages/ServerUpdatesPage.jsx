@@ -20,7 +20,7 @@ function ServerUpdatesPage() {
             to={`/server/updates/${item.id}`}
           >
             <h2>{item.version}</h2>
-            <p>New Races: Demon & Mermaid, Races Rework, Class Rework</p>
+            <p>{item.summary}</p>
           </Link>
         ))}
       </section>
