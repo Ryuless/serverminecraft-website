@@ -145,6 +145,12 @@ function mapMetrics(serverOverview, performanceOverview) {
     toNumberOrNull(serverOverview?.numbers?.max_players) ??
     toNumberOrNull(serverOverview?.numbers?.best_peak_players)
 
+  const reportedOnline =
+    toBooleanOrNull(serverOverview?.state?.online) ??
+    toBooleanOrNull(serverOverview?.online) ??
+    toBooleanOrNull(performanceOverview?.state?.online) ??
+    toBooleanOrNull(performanceOverview?.online)
+
   const tps =
     toNumberOrNull(performanceOverview?.numbers?.tps_24h) ??
     toNumberOrNull(performanceOverview?.numbers?.tps_7d) ??
@@ -155,9 +161,10 @@ function mapMetrics(serverOverview, performanceOverview) {
     millisecondsToSeconds(performanceOverview?.numbers?.server_uptime_24h)
 
   const online =
-    (playersOnline !== null && playersOnline > 0) ||
-    (tps !== null && tps > 0) ||
-    (uptimeSeconds !== null && uptimeSeconds > 0)
+    reportedOnline ??
+    playersOnline !== null ||
+    tps !== null ||
+    uptimeSeconds !== null
 
   return {
     online,
