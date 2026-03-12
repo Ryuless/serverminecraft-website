@@ -1,11 +1,13 @@
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import CommunityPage from './pages/CommunityPage'
 import ServerPage from './pages/ServerPage'
+import ServerUpdatesPage from './pages/ServerUpdatesPage'
+import ServerUpdateDetailPage from './pages/ServerUpdateDetailPage'
 import './App.css'
 
 function App() {
   const location = useLocation()
-  const isServerPage = location.pathname === '/server'
+  const isServerPage = location.pathname.startsWith('/server')
 
   const heroEyebrow = isServerPage ? 'Server Network' : 'AllGames Community'
   const heroTitle = isServerPage ? 'VeynarSMP' : 'Gabvers'
@@ -47,6 +49,8 @@ function App() {
         <Routes>
           <Route path="/" element={<CommunityPage />} />
           <Route path="/server" element={<ServerPage />} />
+          <Route path="/server/updates" element={<ServerUpdatesPage />} />
+          <Route path="/server/updates/:updateId" element={<ServerUpdateDetailPage />} />
         </Routes>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   SERVER_CONFIG,
   formatUptime,
@@ -356,6 +357,11 @@ function ServerPage() {
               Pantau halaman ini secara berkala untuk info maintenance, event, dan
               pembaruan performa server.
             </p>
+          </div>
+          <div className="updates-action">
+            <Link className="btn btn-refresh" to="/server/updates">
+              Lihat Patch & Update Server
+            </Link>
           </div>
         </article>
       </section>

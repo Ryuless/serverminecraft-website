@@ -594,6 +594,30 @@ h1 {
   min-height: 128px;
 }
 
+.update-link-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.update-link-card:visited,
+.update-link-card:hover,
+.update-link-card:active,
+.update-link-card:focus-visible {
+  color: inherit;
+  text-decoration: none;
+}
+
+.update-detail-text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: inherit;
+  line-height: 1.5;
+  color: #d8e8ff;
+}
+
 .metric-value {
   font-size: 1.85rem;
   font-weight: 800;
@@ -625,6 +649,16 @@ h1 {
 .cube-card,
 .updates-card {
   min-height: 320px;
+}
+
+.updates-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.updates-action {
+  margin-top: auto;
+  padding-top: 12px;
 }
 
 .cube-stage {
