@@ -106,68 +106,22 @@ function ServerPage() {
 
   }
 
-  function toNumberOrNull(value) {
-    const parsed = Number(value)
-    return Number.isFinite(parsed) ? parsed : null
-  }
-
-  function toBooleanOrNull(value) {
-    if (typeof value === 'boolean') return value
-    if (value === 'true') return true
-    if (value === 'false') return false
-    return null
-  }
-
-  function normalizePayload(payload) {
-    const playersOnline =
-      toNumberOrNull(payload?.playersOnline) ??
-      toNumberOrNull(payload?.onlinePlayers) ??
-      toNumberOrNull(payload?.playerCount)
-
-    const maxPlayers =
-      toNumberOrNull(payload?.maxPlayers) ??
-      toNumberOrNull(payload?.playersMax)
-
-    const uptimeSeconds =
-      toNumberOrNull(payload?.uptimeSeconds) ??
-      toNumberOrNull(payload?.uptime)
-
-    const tps = toNumberOrNull(payload?.tps)
-
-    const online =
-      toBooleanOrNull(payload?.online) ??
-      toBooleanOrNull(payload?.isOnline) ??
-      (playersOnline !== null && playersOnline > 0) ||
-      (tps !== null && tps > 0) ||
-      (uptimeSeconds !== null && uptimeSeconds > 0)
-
-    return {
-      online,
-      playersOnline,
-      maxPlayers,
-      tps,
-      uptimeSeconds,
-    }
-  }
-
   function applyRealtimeMetrics(payload) {
-    const normalized = normalizePayload(payload)
-
     setStats((current) => ({
       ...current,
-      online: typeof normalized.online === 'boolean' ? normalized.online : current.online,
+      online: typeof payload?.online === 'boolean' ? payload.online : current.online,
       playersOnline:
-        typeof normalized.playersOnline === 'number'
-          ? normalized.playersOnline
+        typeof payload?.playersOnline === 'number'
+          ? payload.playersOnline
           : current.playersOnline,
       maxPlayers:
-        typeof normalized.maxPlayers === 'number'
-          ? normalized.maxPlayers
+        typeof payload?.maxPlayers === 'number'
+          ? payload.maxPlayers
           : current.maxPlayers,
-      tps: typeof normalized.tps === 'number' ? normalized.tps : current.tps,
+      tps: typeof payload?.tps === 'number' ? payload.tps : current.tps,
       uptimeSeconds:
-        typeof normalized.uptimeSeconds === 'number'
-          ? normalized.uptimeSeconds
+        typeof payload?.uptimeSeconds === 'number'
+          ? payload.uptimeSeconds
           : current.uptimeSeconds,
       error: payload?.error || '',
       updatedAt: payload?.updatedAt ? new Date(payload.updatedAt) : current.updatedAt,
@@ -293,7 +247,7 @@ function ServerPage() {
         <article className="card metric-card">
           <h2>Online Player</h2>
           <p className="metric-value">
-            {stats.playersOnline} / {stats.maxPlayers || 100}
+            {stats.playersOnline} / 100
           </p>
         </article>
 
@@ -347,7 +301,7 @@ function ServerPage() {
               <div className="cube-face cube-back cube-side">
                 <div className="cube-face-content">
                   <span className="cube-face-label">Online</span>
-                  <strong>{stats.playersOnline}/{stats.maxPlayers || 100}</strong>
+                  <strong>{stats.playersOnline}/100</strong>
                 </div>
               </div>
               <div className="cube-face cube-right cube-side">
@@ -385,7 +339,7 @@ function ServerPage() {
               <strong>Status saat ini:</strong> {statusLabel}
             </p>
             <p>
-              <strong>Online player:</strong> {stats.playersOnline}/{stats.maxPlayers || 100}
+              <strong>Online player:</strong> {stats.playersOnline}/100
             </p>
             <p>
               <strong>Performa TPS:</strong>{' '}
