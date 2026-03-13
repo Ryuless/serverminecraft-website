@@ -1,5 +1,16 @@
 export const SERVER_UPDATES = [
   {
+    id: 'v1-1-4',
+    version: 'v1.1.4',
+    date: '2026-03-13',
+    image: '/patch-updates/images/v1.1.4.png',
+    summary:
+      'Update Pool Rate Mythic Crates, Update Mythic Crate Bisa Di Gacha Menggunakan Mythic Key/$2500, Added Jobs Npc',
+    content: `Update Pool Rate Mythic Crates
+Update Mythic Crate Bisa Di Gacha Menggunakan Mythic Key/$2500
+Added Jobs Npc`,
+  },
+  {
     id: 'v1-1-2',
     version: 'v1.1.2',
     date: '2026-03-12',
